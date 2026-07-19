@@ -10,4 +10,4 @@ python3 python_service/app.py &
 
 echo "Starting Node.js API and serving React app..."
 # A Node.js alkalmazás az előtérben indul (ez tartja életben a Docker konténert)
-node server/index.js
+node --experimental-sqlite server/index.js
