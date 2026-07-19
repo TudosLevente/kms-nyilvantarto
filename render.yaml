@@ -23,7 +23,3 @@ services:
         # A Render automatikusan beállítja a RENDER_EXTERNAL_URL környezeti változót a generált domainre
         # Ezt fogja az Express engedélyezni CORS-ban
         value: "*"
-    disk:
-      name: kms-data
-      mountPath: /app/data # Itt fog megmaradni az SQLite adatbázis újraindítások után is
-      sizeGB: 1
