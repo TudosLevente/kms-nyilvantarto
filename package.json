@@ -1,0 +1,32 @@
+{
+  "name": "kms_nyilvantarto",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently -k -n NODE,PYTHON,REACT -c green,blue,magenta \"npm:dev:server\" \"npm:dev:python\" \"npm:dev:client\"",
+    "dev:server": "node server/index.js",
+    "dev:python": "python3 python_service/app.py",
+    "dev:client": "vite --host 127.0.0.1 --port 5173",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "check": "node --check server/index.js && node --check server/app.js && node --check server/repository.js && node --check server/db.js && node --check server/routes/auth-routes.js && node --check server/routes/dashboard-routes.js && node --check server/routes/payment-routes.js && node --check server/routes/student-routes.js && node --check server/services/auth-service.js && node --check server/services/analytics-service.js && node --check server/middleware/auth.js && node --check server/utils/validation.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "bcryptjs": "^3.0.3",
+    "concurrently": "^10.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "vite": "^8.0.16"
+  }
+}

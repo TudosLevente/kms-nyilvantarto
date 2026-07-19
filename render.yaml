@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: kms-nyilvantarto
+    env: docker
+    plan: free # Az ingyenes csomagot használjuk a demóhoz
+    dockerCommand: ./start.sh
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: PYTHON_ANALYTICS_PORT
+        value: 8001
+      - key: PYTHON_SERVICE_URL
+        value: http://127.0.0.1:8001
+      - key: DATABASE_PATH
+        value: ./data/kms.sqlite
+      - key: JWT_SECRET
+        generateValue: true # Automatikusan generál egy titkos kulcsot a Render
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: ALLOWED_ORIGINS
+        # A Render automatikusan beállítja a RENDER_EXTERNAL_URL környezeti változót a generált domainre
+        # Ezt fogja az Express engedélyezni CORS-ban
+        value: "*"
+    disk:
+      name: kms-data
+      mountPath: /app/data # Itt fog megmaradni az SQLite adatbázis újraindítások után is
+      sizeGB: 1
