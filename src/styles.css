@@ -227,6 +227,14 @@ select:focus {
   line-height: 1;
 }
 
+.hide-on-mobile {
+  display: inline;
+}
+
+.mobile-logout {
+  display: none !important;
+}
+
 .app-shell {
   min-height: 100vh;
   display: grid;
@@ -894,30 +902,56 @@ select:focus {
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 1fr;
+    padding-bottom: 70px; /* Space for bottom nav */
   }
 
   .sidebar {
     min-height: auto;
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    padding: 14px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 8px 12px;
+    border-right: none;
+    border-top: 1px solid rgba(255, 247, 232, 0.1);
+    background: var(--nav);
   }
 
   .sidebar-brand {
-    margin-bottom: 12px;
+    display: none; /* Hide logo in bottom nav */
   }
 
   .nav-list {
     grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
   }
 
-  .logout-button {
-    margin-top: 12px;
+  .nav-item {
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 13px;
+  }
+
+  .nav-item:hover,
+  .nav-item.is-active {
+    box-shadow: inset 0 -4px 0 var(--gold); /* Highlight on bottom instead of left */
+  }
+
+  .sidebar .logout-button {
+    display: none;
+  }
+  
+  .mobile-logout {
+    display: inline-flex !important;
+  }
+  
+  .hide-on-mobile {
+    display: none !important;
   }
 
   .content-shell {
-    padding: 18px;
+    padding: 16px;
   }
 
   .topbar,
@@ -927,6 +961,15 @@ select:focus {
     align-items: stretch;
     flex-direction: column;
     width: 100%;
+  }
+  
+  .topbar-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .search-box {
+    flex: 1 1 100%;
   }
 
   .metric-grid,
@@ -944,7 +987,7 @@ select:focus {
   }
 
   .nav-list {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .form-grid {

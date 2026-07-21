@@ -33,7 +33,10 @@ export function AppShell({ children, onAddStudent, onLogout, searchTerm, setSear
               <input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Keresés név, szülő vagy email alapján" />
             </label>
             <button className="primary-button" type="button" onClick={onAddStudent}>
-              <Plus size={18} /> Tanítvány
+              <Plus size={18} /> <span className="hide-on-mobile">Tanítvány</span>
+            </button>
+            <button className="ghost-button mobile-logout" type="button" onClick={onLogout} aria-label="Kilépés">
+              <LogOut size={18} />
             </button>
           </div>
         </header>
