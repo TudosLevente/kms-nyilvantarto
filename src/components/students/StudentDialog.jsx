@@ -4,7 +4,12 @@ import { BELTS, GROUPS } from "../../constants.js";
 export function StudentDialog({ student, onClose, onSave, onDelete }) {
   const [form, setForm] = useState(student);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const isExisting = Boolean(student.id);
+
+  const today = new Date();
+  const maxDate = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate()).toISOString().split("T")[0];
+  const minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate()).toISOString().split("T")[0];
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -22,10 +27,13 @@ export function StudentDialog({ student, onClose, onSave, onDelete }) {
   async function submit(event) {
     event.preventDefault();
     setIsSubmitting(true);
+    setError("");
     try {
       await onSave(form);
-    } finally {
       onClose();
+    } catch (err) {
+      setError(err.message || "Hiba történt a mentés során.");
+      setIsSubmitting(false);
     }
   }
 
@@ -54,11 +62,26 @@ export function StudentDialog({ student, onClose, onSave, onDelete }) {
           <div className="form-grid">
             <label>
               Teljes név
-              <input value={form.fullName} onChange={(event) => update("fullName", event.target.value)} required />
+              <input 
+                value={form.fullName} 
+                onChange={(event) => update("fullName", event.target.value)} 
+                minLength={3}
+                maxLength={80}
+                pattern="^[a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ \-\.]+$"
+                title="Kérlek, csak betűket, szóközöket, kötőjelet vagy pontot használj!"
+                required 
+              />
             </label>
             <label>
               Születési dátum
-              <input value={form.birthDate} onChange={(event) => update("birthDate", event.target.value)} type="date" required />
+              <input 
+                value={form.birthDate} 
+                onChange={(event) => update("birthDate", event.target.value)} 
+                type="date" 
+                min={minDate}
+                max={maxDate}
+                required 
+              />
             </label>
             <label>
               Övfokozat
@@ -74,19 +97,38 @@ export function StudentDialog({ student, onClose, onSave, onDelete }) {
             </label>
             <label>
               Szülő neve
-              <input value={form.parentName || ""} onChange={(event) => update("parentName", event.target.value)} />
+              <input 
+                value={form.parentName || ""} 
+                onChange={(event) => update("parentName", event.target.value)} 
+                minLength={3}
+                maxLength={80}
+                pattern="^[a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ \-\.]+$"
+                title="Kérlek, csak betűket, szóközöket, kötőjelet vagy pontot használj!"
+              />
             </label>
             <label>
               Szülő telefonszáma
-              <input value={form.parentPhone || ""} onChange={(event) => update("parentPhone", event.target.value)} type="tel" />
+              <input 
+                value={form.parentPhone || ""} 
+                onChange={(event) => update("parentPhone", event.target.value)} 
+                type="tel" 
+                maxLength={30}
+              />
             </label>
             <label className="wide">
               Szülő email címe
-              <input value={form.parentEmail || ""} onChange={(event) => update("parentEmail", event.target.value)} type="email" />
+              <input 
+                value={form.parentEmail || ""} 
+                onChange={(event) => update("parentEmail", event.target.value)} 
+                type="email" 
+                maxLength={100}
+              />
             </label>
           </div>
 
-          <div className="dialog-actions">
+          {error && <p className="error-text" style={{ marginTop: "16px" }}>{error}</p>}
+
+          <div className="dialog-actions" style={{ marginTop: error ? "16px" : "22px" }}>
             {isExisting && <button className="danger-button" type="button" onClick={confirmDelete} disabled={isSubmitting}>Törlés</button>}
             <div className="spacer" />
             <button className="ghost-button" type="button" onClick={onClose} disabled={isSubmitting}>Mégsem</button>

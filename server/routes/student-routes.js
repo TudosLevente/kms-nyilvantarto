@@ -8,7 +8,7 @@ import {
   listStudents,
   updateStudent,
 } from "../repository.js";
-import { requireFields } from "../utils/validation.js";
+import { requireFields, isValidName, isValidBirthDate, isValidEmail } from "../utils/validation.js";
 
 export const studentRouter = Router();
 
@@ -22,16 +22,29 @@ studentRouter.get("/:id", auth, (req, res) => {
   res.json(profile);
 });
 
+function validateStudentInput(body) {
+  const missing = requireFields(body, ["fullName", "birthDate", "beltRank", "group"]);
+  if (missing.length) return { error: "Hiányzó kötelező mező.", missing };
+
+  if (!isValidName(body.fullName)) return { error: "Érvénytelen teljes név." };
+  if (!isValidBirthDate(body.birthDate)) return { error: "Érvénytelen születési dátum. (A tanulónak 2 és 100 év közöttinek kell lennie)." };
+  if (body.parentName && !isValidName(body.parentName)) return { error: "Érvénytelen szülő neve." };
+  if (body.parentEmail && !isValidEmail(body.parentEmail)) return { error: "Érvénytelen szülő email címe." };
+
+  return null;
+}
+
 studentRouter.post("/", auth, (req, res) => {
-  const missing = requireFields(req.body, ["fullName", "birthDate", "beltRank", "group"]);
-  if (missing.length) return res.status(400).json({ error: "Hiányzó kötelező mező.", missing });
+  const error = validateStudentInput(req.body);
+  if (error) return res.status(400).json(error);
+  
   res.status(201).json(createStudent(req.body));
 });
 
 studentRouter.put("/:id", auth, (req, res) => {
   const id = Number(req.params.id);
-  const missing = requireFields(req.body, ["fullName", "birthDate", "beltRank", "group"]);
-  if (missing.length) return res.status(400).json({ error: "Hiányzó kötelező mező.", missing });
+  const error = validateStudentInput(req.body);
+  if (error) return res.status(400).json(error);
 
   const student = updateStudent(id, req.body);
   if (!student) return res.status(404).json({ error: "A tanítvány nem található." });
