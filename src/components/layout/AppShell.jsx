@@ -17,9 +17,6 @@ export function AppShell({ children, onAddStudent, onLogout, searchTerm, setSear
           <NavButton active={view === "students"} onClick={() => setView("students")}>Tanítványok</NavButton>
           <NavButton active={view === "payments"} onClick={() => setView("payments")}>Díjak</NavButton>
         </nav>
-        <button className="ghost-button logout-button" type="button" onClick={onLogout}>
-          <LogOut size={18} /> Kilépés
-        </button>
       </aside>
 
       <section className="content-shell">
@@ -35,8 +32,8 @@ export function AppShell({ children, onAddStudent, onLogout, searchTerm, setSear
             <button className="primary-button" type="button" onClick={onAddStudent}>
               <Plus size={18} /> <span className="hide-on-mobile">Tanítvány</span>
             </button>
-            <button className="ghost-button mobile-logout" type="button" onClick={onLogout} aria-label="Kilépés">
-              <LogOut size={18} />
+            <button className="ghost-button logout-btn-top" type="button" onClick={onLogout} aria-label="Kilépés" title="Kilépés">
+              <LogOut size={18} /> <span className="hide-on-mobile">Kilépés</span>
             </button>
           </div>
         </header>

@@ -231,10 +231,6 @@ select:focus {
   display: inline;
 }
 
-.mobile-logout {
-  display: none !important;
-}
-
 .app-shell {
   min-height: 100vh;
   display: grid;
@@ -942,10 +938,6 @@ select:focus {
     display: none;
   }
   
-  .mobile-logout {
-    display: inline-flex !important;
-  }
-  
   .hide-on-mobile {
     display: none !important;
   }
@@ -954,7 +946,14 @@ select:focus {
     padding: 16px;
   }
 
-  .topbar,
+  .topbar {
+    position: relative;
+    padding-right: 48px; /* Make space for the absolute logout button */
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+
   .topbar-actions,
   .students-panel,
   .profile-hero {
@@ -970,6 +969,14 @@ select:focus {
   
   .search-box {
     flex: 1 1 100%;
+  }
+  
+  .logout-btn-top {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    padding: 8px !important;
+    min-height: unset !important;
   }
 
   .metric-grid,
